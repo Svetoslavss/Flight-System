@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<main>
+    <section>
+        <h1>Login</h1>
+        <form th:action="@{/login}" method="post">
+            <div>
+                <label for="username">Username:</label>
+                <input type="text" id="username" th:value="${param.username}">
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" th:value="${param.password}">
+            </div>
+            <div>
+                <button type="submit">Login</button>
+            </div>
+            <div th:if="${param.error}" class="thymeleaf-error">
+                <p>Invalid username or password</p>
+            </div>
+            <div>
+                <a href="/register">Register</a>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>
