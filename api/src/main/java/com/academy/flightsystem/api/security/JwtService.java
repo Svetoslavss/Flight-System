@@ -42,6 +42,8 @@ public class JwtService {
         return buildToken(username);
     }
 
+
+    // Checks if the token is valid ;
     public String buildToken(String username){
         return Jwts.builder()
                 .subject(username)
