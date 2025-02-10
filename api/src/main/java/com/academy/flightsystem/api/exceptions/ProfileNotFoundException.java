@@ -1,0 +1,7 @@
+package com.academy.flightsystem.api.exceptions;
+
+public class ProfileNotFoundException extends RuntimeException{
+        public ProfileNotFoundException(String message) {
+            super(message);
+    }
+}
