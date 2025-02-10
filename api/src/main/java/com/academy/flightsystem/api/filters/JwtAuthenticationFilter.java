@@ -1,6 +1,7 @@
 package com.academy.flightsystem.api.filters;
 
 
+import com.academy.flightsystem.api.model.UserInfoDetails;
 import com.academy.flightsystem.api.security.JwtService;
 import com.academy.flightsystem.api.service.UserInfoService;
 import jakarta.servlet.FilterChain;
@@ -20,6 +21,7 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+
     @Autowired
     private JwtService jwtService;
 
@@ -32,22 +34,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = null;
         String username = null;
 
-        if(header != null && header.startsWith("Bearer")){
+        if (header != null && header.startsWith("Bearer ")) {
             token = header.substring(7);
             username = jwtService.extractUsername(token);
         }
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userInfoDetails = userInfoService.loadUserByUsername(username);
 
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserDetails userDetails = userInfoService.loadUserByUsername(username);
-
-            if(jwtService.isTokenValid(token, userDetails)){
-                UsernamePasswordAuthenticationToken userToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                userToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            if(jwtService.isTokenValid(token, userInfoDetails)){
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userInfoDetails, null, userInfoDetails.getAuthorities());
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-
         }
-
-
         filterChain.doFilter(request, response);
     }
+
 }
