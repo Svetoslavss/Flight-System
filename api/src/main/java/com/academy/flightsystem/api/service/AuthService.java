@@ -1,5 +1,6 @@
 package com.academy.flightsystem.api.service;
 
+import com.academy.flightsystem.api.model.LoginResponse;
 import com.academy.flightsystem.api.model.dto.LoginUserDto;
 import com.academy.flightsystem.api.model.dto.RegisterUserDto;
 import com.academy.flightsystem.api.model.UserInfo;
@@ -12,8 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class AuthService {
@@ -37,14 +36,12 @@ public class AuthService {
      return repository.save(userInfo);
     }
 
-    // loginResponse(token, user)
-
-        public String login(LoginUserDto userDto){
+        public LoginResponse login(LoginUserDto userDto){
          authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword()));
 
          var token = jwtService.generateToken(authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword())).getPrincipal().toString());
          var user = repository.findByUsername(userDto.getUsername()).orElseThrow();
 
-         return token + " " + user.getUsername();
+            return new LoginResponse(user.getUsername(), token);
         }
 }
