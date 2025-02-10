@@ -1,20 +1,24 @@
-package com.academy.flightsystem.api.model.dto;
+package com.academy.flightsystem.api.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 public class LoginResponse {
     private String token;
     private Long expiresIn;
     private String username;
-    private String error;
     private List<String> roles;
+    private String error;
+
+
+    public  LoginResponse(String username, String token){
+         this.username = username;
+         this.token = token;
+    }
 
     public LoginResponse setToken(String token){
         this.token = token;
